@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js'; // ✅ ADD THIS
+import postRoutes from './routes/postRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -36,10 +37,27 @@ app.get('/api/health', (req, res) => {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes); // ✅ ADD THIS LINE
+app.use('/api/posts', postRoutes);
 
 // 404 Handler
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+app.use((req, res, next) => {
+  const error = new Error(`Not Found - ${req.originalUrl}`);
+  error.status = 404;
+  next(error);
+});
+
+// Global Error Handler Middleware
+app.use((err, req, res, next) => {
+  console.error('Error Details:', {
+    message: err.message,
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+  });
+
+  const statusCode = err.status || res.statusCode === 200 ? 500 : res.statusCode;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || 'Internal server error'
+  });
 });
 
 // Start Server
