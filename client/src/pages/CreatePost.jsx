@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { toast } from 'react-toastify';
 import './CreatePost.css';
+import ImageUpload from '../components/ImageUpload';
 
 function CreatePost() {
     const [title, setTitle] = useState('');
@@ -25,10 +26,21 @@ function CreatePost() {
         }
     };
 
+    const handleUpload = (formData) => {
+        console.log('Image File from form data:', formData.get('image'));
+        toast.info('Image selected. Check console for FormData output.');
+    };
+
     return (
         <div className="create-post-container">
             <div className="create-post-card">
                 <h1>Create New Post</h1>
+
+                <div className="form-group" style={{ marginBottom: '25px', padding: '15px', border: '1px dashed #ccc', borderRadius: '8px' }}>
+                    <h3 style={{ marginTop: 0, marginBottom: '10px' }}>Upload Cover Image</h3>
+                    <ImageUpload onUpload={handleUpload} />
+                </div>
+
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="title">Title</label>
