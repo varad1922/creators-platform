@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll=false --verbose"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -17,6 +18,11 @@
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.2.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
