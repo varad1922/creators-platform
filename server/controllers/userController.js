@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 // @desc    Register a new user
@@ -30,10 +31,18 @@ export const registerUser = async (req, res) => {
             password: hashedPassword,
         });
 
+        // Generate JWT
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRE }
+        );
+
         res.status(201).json({
             _id: user._id,
             name: user.name,
             email: user.email,
+            token,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
         });
